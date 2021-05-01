@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block main %}
+<div id="app" class="vh-100 d-flex flex-column">
+  <app-header></app-header>
+
+  <main class="flex-grow-1">
+    <!-- component matched by the route will render here -->
+    <router-view></router-view>
+  </main>
+
+  <app-footer class="flex-shrink-1"></app-footer>
+</div>
+{% endblock %}

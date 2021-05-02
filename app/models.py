@@ -1,6 +1,8 @@
 from . import db
 
 
+
+
 class Cars(db.Model):
     __tablename__ = 'cars'
 

@@ -1,8 +1,9 @@
-import os
+import os, datetime
 
 from flask import json
 
 from app import app
+from app import models
 from flask import render_template, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -10,8 +11,10 @@ from .forms import LoginForm,NewUserForm,AddNewCarForm
 from flask.json import jsonify
 from flask_login import login_user, login_user, current_user, login_required
 from flask_jwt_extended import jwt_required, create_access_token
-from app import app, db
+from app import db
 from app.models import Cars, Favourites, Users
+from flask_sqlalchemy import sqlalchemy
+from sqlalchemy import exc
 
 
 @app.route('/', defaults={'path': ''})
@@ -39,8 +42,11 @@ def register():
     
         newUser = Users(username,password,fullname, email,location,biography,filename, date_joined)
 
+        
+
         takenUsername = Users.query.filter_by(username=username).first()
         takenEmail = Users.query.filter_by(email=email).first()
+        
 
 
         if takenUsername is not None: 
@@ -51,10 +57,11 @@ def register():
         try: 
             db.session.add(newUser)
             db.session.commit()
-            return jsonify(message="Success! New user was added!")
-        except Exception as e:
+            print(newUser)
+            return jsonify(messages="Success! New user was added!")
+        except Exception as exc:
             db.session.rollback()
-            print(e)
+            print(exc)
         return jsonify(errors=["Error!"])
     return jsonify(errors=form_errors(form))
     
@@ -79,8 +86,8 @@ def login():
         else:
             errors = form_errors(form)
             return jsonify(errors={'message': errors}), 422
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
         return jsonify('error'), 422
 
 

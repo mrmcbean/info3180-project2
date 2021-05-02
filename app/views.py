@@ -3,11 +3,12 @@ import os
 from flask import json
 
 from app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.forms import LoginForm
+from .forms import LoginForm,NewUserForm,AddNewCarForm
 from flask.json import jsonify
+from flask_login import login_user, login_user, current_user, login_required
 from flask_jwt_extended import jwt_required, create_access_token
 from app import app, db
 from app.models import Cars, Favourites, Users
@@ -18,8 +19,50 @@ from app.models import Cars, Favourites, Users
 def index(path):
     return render_template('index.html')
 
+@app.route('/api/register', methods=['POST'])
+def register():
+    form = NewUserForm()
+    uploads = app.config['UPLOAD_FOLDER']
+
+    if request.method == "POST" and form.validate_on_submit():
+        username = request.json['username']
+        password = request.json['password']
+        fullname = request.json['fullname']
+        email = request.json['email']
+        location = request.json['location']
+        biography = request.json['biography']
+        date_joined = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        photo = form.photo.data 
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join(uploads,filename))
+    
+        newUser = Users(username,password,fullname, email,location,biography,filename, date_joined)
+
+        takenUsername = Users.query.filter_by(username=username).first()
+        takenEmail = Users.query.filter_by(email=email).first()
+
+
+        if takenUsername is not None: 
+            return jsonify(errors= ["Username not available"])
+        elif takenEmail is not None:
+            return jsonify(errors= ["Email address not available"])
+
+        try: 
+            db.session.add(newUser)
+            db.session.commit()
+            return jsonify(message="Success! New user was added!")
+        except Exception as e:
+            db.session.rollback()
+            print(e)
+        return jsonify(errors=["Error!"])
+    return jsonify(errors=form_errors(form))
+    
+        
+    
 
 @app.route('/api/auth/login', methods=['POST'])
+@login_required
 def login():
     try:
         form = LoginForm()

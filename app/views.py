@@ -6,7 +6,7 @@ from app import app
 from flask import render_template, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
-from .forms import LoginForm,NewUserForm,AddNewCarForm
+from app.forms import LoginForm , NewUserForm , AddNewCarForm
 from flask.json import jsonify
 from flask_login import login_user, login_user, current_user, login_required
 from flask_jwt_extended import jwt_required, create_access_token

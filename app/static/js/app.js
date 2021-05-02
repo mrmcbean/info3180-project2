@@ -174,7 +174,7 @@ const Register = {
                         </div>
                     </div>
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
                     </div>
                 </form>
             </div>
@@ -206,6 +206,7 @@ const Register = {
     }
   },
 };
+
 
 const Login = {
   name: "Login",

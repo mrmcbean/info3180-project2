@@ -2,9 +2,9 @@ import os, datetime
 
 from flask import json
 
-from app import app
+from app import app, login_manager
 from app import models
-from flask import render_template, request, redirect, jsonify
+from flask import render_template, request, redirect, jsonify,url_for,flash,session
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from .forms import LoginForm,NewUserForm,AddNewCarForm
@@ -15,6 +15,7 @@ from app import db
 from app.models import Cars, Favourites, Users
 from flask_sqlalchemy import sqlalchemy
 from sqlalchemy import exc
+from app.config import *
 
 
 @app.route('/', defaults={'path': ''})
@@ -25,51 +26,56 @@ def index(path):
 @app.route('/api/register', methods=['POST'])
 def register():
     form = NewUserForm()
-    uploads = app.config['UPLOAD_FOLDER']
+    uploadFolder = app.config['UPLOAD_FOLDER']
 
     if request.method == "POST" and form.validate_on_submit():
-        username = request.json['username']
-        password = request.json['password']
-        fullname = request.json['fullname']
-        email = request.json['email']
-        location = request.json['location']
-        biography = request.json['biography']
-        date_joined = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        photo = form.photo.data 
-        filename = secure_filename(photo.filename)
-        photo.save(os.path.join(uploads,filename))
-    
-        newUser = Users(username,password,fullname, email,location,biography,filename, date_joined)
-
-        
-
-        takenUsername = Users.query.filter_by(username=username).first()
-        takenEmail = Users.query.filter_by(email=email).first()
-        
-
-
-        if takenUsername is not None: 
-            return jsonify(errors= ["Username not available"])
-        elif takenEmail is not None:
-            return jsonify(errors= ["Email address not available"])
 
         try: 
+            username = form.username.data
+            password = form.password.data
+            fullname = form.fullname.data
+            email = form.email.data
+            location = form.location.data
+            biography = form.biography.data
+            date_joined = str(datetime.date.today())
+
+            photo = form.photo.data 
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(uploadFolder,filename))
+        
+            newUser = Users(username=username,password=password,fullname=fullname, email=email,location=location,biography=biography,photo=filename, date_joined=date_joined)
+            print(newUser)
+
             db.session.add(newUser)
             db.session.commit()
             print(newUser)
-            return jsonify(messages="Success! New user was added!")
+            return jsonify(message="Success! New user was added!")
+
         except Exception as exc:
             db.session.rollback()
             print(exc)
-        return jsonify(errors=["Error!"])
+            return jsonify(errors=["Error!"])
     return jsonify(errors=form_errors(form))
+
+            
+
+        #takenUsername = Users.query.filter_by(username=username).first()
+        #takenEmail = Users.query.filter_by(email=email).first()
+        
+            
+
+
+        #if takenUsername is not None: 
+        #    return jsonify(errors= ["Username not available"])
+        #elif takenEmail is not None:
+        #    return jsonify(errors= ["Email address not available"])
+
     
         
     
 
 @app.route('/api/auth/login', methods=['POST'])
-@login_required
+
 def login():
     try:
         form = LoginForm()
@@ -89,6 +95,12 @@ def login():
     except Exception as exc:
         print(exc)
         return jsonify('error'), 422
+
+@app.route('/api/auth/logout', methods = ['GET'])
+@jwt_required
+def logout():
+    return jsonify(message= "User successfully logged out.")
+    
 
 
 def form_errors(form):

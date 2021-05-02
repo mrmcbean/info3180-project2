@@ -11,8 +11,8 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     """Development Config that extends the Base Config Object"""
-    FLASK_ENV = 'development'
-    ENV = 'development'
+    #FLASK_ENV = 'development'
+    #ENV = 'development'
     DEVELOPMENT = True
     DEBUG = True
 

@@ -165,7 +165,7 @@ def carDem():
             
             car = Cars(description=description,make=make,model=model,colour=colour,year=year,transmission=transmission,car_type=car_type,price=price,photo=filename,user_id=user_id)
 
-            photo.save(os.path.join(app.config['UPLOAD_CARPHOTOs'],filename))
+            photo.save(os.path.join(app.config['UPLOAD_CARPHOTO'],filename))
             db.session.add(car)
             db.session.commit()
             
@@ -226,7 +226,7 @@ def search():
     carsGen = Cars.query.filter((func.lower(Cars.make)==func.lower(make)) | (func.lower(Cars.model)==func.lower(model)))
     carList = []
     for car in carsGen:
-        obCar = {"id": car.id, "user_id": car.user_id,"make": car.make,"model": car.model,"year": car.year,"price": car.price,"photo": os.path.join(app.config['UPLOAD_CARPHOTOS'],car.photo) }
+        obCar = {"id": car.id, "user_id": car.user_id,"make": car.make,"model": car.model,"year": car.year,"price": car.price,"photo": os.path.join(app.config['UPLOAD_CARPHOTO'],car.photo) }
         carList.append(obCar)
         
     return jsonify(cars=carList)
@@ -261,7 +261,7 @@ def favourites(user_id):
     faveCarList = []
     for fav in faveCarList:
         car = Cars.query.filter_by(id=fav.car_id).first()
-        favOb = {"id": car.id, "user_id": car.user_id,"make": car.make,"model": car.model,"year": car.year,"price": car.price,"photo": os.path.join("../",app.config['UPLOAD_CARPHOTOS'],car.photo) }
+        favOb = {"id": car.id, "user_id": car.user_id,"make": car.make,"model": car.model,"year": car.year,"price": car.price,"photo": os.path.join("../",app.config['UPLOAD_CARPHOTO'],car.photo) }
         fvcars.append(favOb)
         
     return jsonify(cars=faveCarList)

@@ -1,8 +1,36 @@
 const app = Vue.createApp({
-  data() {
+  data: function () {
     return {};
-  },
+  }
 });
+
+app.component("app-header", {
+  name: "AppHeader",
+  template: `
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">United Auto Sales</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <div class="navbar-nav ms-auto">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/register">Register</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/login">Login</router-link>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+  </nav>
+    `,
+});
+
 
 const Home = {
   name: "Home",
@@ -32,32 +60,6 @@ const Home = {
   },
 };
 
-app.component("app-header", {
-  name: "AppHeader",
-  template: `
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">United Auto Sales</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <div class="navbar-nav ms-auto">
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <router-link class="nav-link" to="/register">Register</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link class="nav-link" to="/login">Login</router-link>
-                        </li>
-                    </ul>
-                </div>
-                
-            </div>
-        </div>
-  </nav>
-    `,
-});
 
 app.component("app-footer", {
   name: "AppFooter",
@@ -192,7 +194,7 @@ const Register = {
         email: "",
         location: "",
         biography: "",
-        photo: null,
+        photo: "",
         
       },
     };
@@ -328,3 +330,6 @@ const router = VueRouter.createRouter({
 app.use(router);
 
 app.mount("#app");
+
+
+

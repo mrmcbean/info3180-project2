@@ -4,6 +4,35 @@ const app = Vue.createApp({
   }
 });
 
+const Home = {
+  name: "Home",
+  template: `<div class="row cols-2 g-0">
+        <div class="col my-auto justify-content-center text-center">
+            <div class="d-flex justify-content-center flex-column my-auto">
+                <div>
+                    <h1>Buy and Sell</h1>
+                    <h1>Cars Online</h1>
+                </div>                
+                <div class="mx-auto">
+                    <p> United Auto Sales provides the fastest, easiest and most user friendly way to buy or sell cars online. Find a Great Price on the Vehicle You Want.</p>
+                </div>
+                <div>
+                    <router-link to="/register" class="btn btn-primary btn-large mx-1">Register</router-link>
+                    <router-link to="/login" class="btn btn-success btn-large mx-1">Login</router-link>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <img src="/static/img/front-page.jpg" class="img-fluid" />
+        </div>
+    </div>`,
+  created: function () { localStorage.removeItem("current_user")},  
+  data() {
+    return {};
+  },
+};
+
+
 app.component("app-header", {
   name: "AppHeader",
   template: `
@@ -49,7 +78,7 @@ app.component("app-header", {
         </div>
   </nav>
     `,
-
+/*
   data: function() {
     return{
       auth: localStorage.hasOwnProperty("current_user"),
@@ -57,38 +86,8 @@ app.component("app-header", {
         ? JSON.parse(localStorage.current_user).id 
         : null,
   };
-}
+}*/
 });
-
-
-const Home = {
-  name: "Home",
-  template: `<div class="row cols-2 g-0">
-        <div class="col my-auto justify-content-center text-center">
-            <div class="d-flex justify-content-center flex-column my-auto">
-                <div>
-                    <h1>Buy and Sell</h1>
-                    <h1>Cars Online</h1>
-                </div>                
-                <div class="mx-auto">
-                    <p> United Auto Sales provides the fastest, easiest and most user friendly way to buy or sell cars online. Find a Great Price on the Vehicle You Want.</p>
-                </div>
-                <div>
-                    <router-link to="/register" class="btn btn-primary btn-large mx-1">Register</router-link>
-                    <router-link to="/login" class="btn btn-success btn-large mx-1">Login</router-link>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <img src="/static/img/front-page.jpg" class="img-fluid" />
-        </div>
-    </div>`,
-  created: function () { localStorage.removeItem("current_user")},  
-  data() {
-    return {};
-  },
-};
-
 
 app.component("app-footer", {
   name: "AppFooter",
@@ -232,7 +231,7 @@ const Register = {
     addFile(event) {
       this.registerForm.photo = event.target.files;
     },
-    Register: function() {
+    register() { /*
       let self = this;
       let register = document.getElementById("register");
       let form_data = new FormData(register);
@@ -259,7 +258,7 @@ const Register = {
             router.push("/login");
           }
         });
-    },
+    },/*
     onFileSelected: function () {
       let self = this;
       let filenameArr = $("#photo")[0].value.split("\\");
@@ -271,7 +270,7 @@ const Register = {
       errorFlag: false,
       messageFlag: false,
       message: [],
-      filename: "No File Selected",
+      filename: "No File Selected", */
       //console.log('dope')
     }
   },
